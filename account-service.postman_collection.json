@@ -1,0 +1,687 @@
+{
+	"info": {
+		"_postman_id": "c0595fd4-596c-43ac-8ee5-8358f78ce9e5",
+		"name": "account-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14524570"
+	},
+	"item": [
+		{
+			"name": "signup - ADMIN",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Muhammad Ali\",\r\n   \"lastname\": \"Arafa\",\r\n   \"email\": \"muhammadali40k@acme.com\",\r\n   \"password\": \"Pass$1234567\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup - USER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"ahmed Ali\",\r\n   \"lastname\": \"Zaman\",\r\n   \"email\": \"ahmedali12@acme.com\",\r\n   \"password\": \"Pass$1234567\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup - USER 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"John Doe\",\r\n   \"lastname\": \"Whatever\",\r\n   \"email\": \"johndoe12@acme.com\",\r\n   \"password\": \"Pass$1234567\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update roles - GRANT",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user\": \"johndoe12@acme.com\",\r\n   \"role\":\"AUDITOR\",\r\n   \"operation\": \"GRANT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update roles - REMOVE",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"user\": \"johndoe12@acme.com\",\r\n   \"role\":\"USER\",\r\n   \"operation\": \"REMOVE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changepass",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "johndoe12@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"new_password\": \"callmenow123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/auth/changepass",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"auth",
+						"changepass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "shutdown",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/actuator/shutdown",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"actuator",
+						"shutdown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload payrolls",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"employee\": \"muhammadali40k@acme.com\",\r\n        \"period\": \"06-2022\",\r\n        \"salary\": 500\r\n    },\r\n    {\r\n        \"employee\": \"muhammadali41k@acme.com\",\r\n        \"period\": \"07-2022\",\r\n        \"salary\": 1000\r\n    },\r\n    {\r\n        \"employee\": \"sasa@acme.com\",\r\n        \"period\": \"08-2022\",\r\n        \"salary\": 1200\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/acct/payments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"acct",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get payments with period",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/empl/payment?period=<mm-YYYY>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"empl",
+						"payment"
+					],
+					"query": [
+						{
+							"key": "period",
+							"value": "<mm-YYYY>"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get payments without period",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/empl/payment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"empl",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all users info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update payment info",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"employee\": \"muhammadali40k@acme.com\",\r\n    \"period\": \"<mm-YYYY>\",\r\n    \"salary\": 1500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/acct/payments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"acct",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change user role",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lock user",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "ahmedali12@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": \"muhammadali40k@acme.com\",\r\n    \"operation\": \"LOCK\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/access",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"access"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "unlock user",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n      \"user\": \"johndoe12@acme.com\",\r\n   \"operation\": \"UNLOCK\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/access",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"access"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a USER",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/samyali12@acme.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"samyali12@acme.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete ADMIN",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/admin/user/samyali12@acme.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"admin",
+						"user",
+						"samyali12@acme.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllPayrolls",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "johndoe12@acme.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/acct/payments/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"acct",
+						"payments",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get events",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "johndoe12@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28852/api/security/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28852",
+					"path": [
+						"api",
+						"security",
+						"events"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

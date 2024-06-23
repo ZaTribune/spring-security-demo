@@ -27,7 +27,7 @@ The application defines the following roles:
 - `USER`: Can view their own payroll information.
 - `ACCOUNTANT`: Can view, upload and update payroll information for all employees.
 - `ADMINISTRATOR`: Has all permissions.
-- `AUDITOR`: Can view payroll records for audit purposes.
+- `AUDITOR`: Can view security records for audit purposes.
 
 ### Role-Based Access Control
 Access to endpoints is restricted based on roles. For example:
@@ -35,7 +35,7 @@ Access to endpoints is restricted based on roles. For example:
 - Users can only access their information and own payroll data.
 - Accountants can access all payroll data.
 - Administrators have full access to all resources and management capabilities.
-- Auditors can access payroll records for auditing purposes.
+- Auditors can access security records for auditing purposes.
 ### Business Logic
 The core business logic includes:
 

@@ -2,6 +2,7 @@ package account.controller.api;
 
 
 import account.db.entity.AppUser;
+import account.db.entity.Role;
 import account.db.entity.SecurityEvent;
 import account.domain.*;
 import account.service.EventService;
@@ -15,7 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,16 +38,17 @@ public class AdminController {
         log.info("updating user roles {}", updateRolesRequest);
         Event event;
         String object;
-        if (updateRolesRequest.getOperation().equals(Operation.GRANT)){
-            event=Event.GRANT_ROLE;
-            object=String.format("Grant role %s to %s",updateRolesRequest.getRole()
-                    ,updateRolesRequest.getUser().toLowerCase());
-        }else {
-            event=Event.REMOVE_ROLE;
-            object=String.format("Remove role %s from %s",updateRolesRequest.getRole()
-                    ,updateRolesRequest.getUser().toLowerCase());
+
+        if (updateRolesRequest.getOperation().equals(Operation.GRANT)) {
+            event = Event.GRANT_ROLE;
+            object = String.format("Grant role %s to %s", updateRolesRequest.getRole()
+                    , updateRolesRequest.getUser().toLowerCase());
+        } else {
+            event = Event.REMOVE_ROLE;
+            object = String.format("Remove role %s from %s", updateRolesRequest.getRole()
+                    , updateRolesRequest.getUser().toLowerCase());
         }
-        UpdateRolesResponse response=userService.updateRoles(updateRolesRequest);
+        UpdateRolesResponse response = userService.updateRoles(updateRolesRequest);
 
         eventService.logEvent(
                 SecurityEvent.builder()
@@ -90,7 +93,7 @@ public class AdminController {
 
     @GetMapping("/user")
     public Object getUserInformation(@AuthenticationPrincipal AppUser admin) {
-        log.info("getting users' information for {}",admin);
+        log.info("getting users' information for {}", admin);
 
         List<?> list = userService.getUsers();
         return list.isEmpty() ? new ArrayNode(JsonNodeFactory.instance) : list;
@@ -99,17 +102,17 @@ public class AdminController {
     @PutMapping("/user/access")
     public UpdateUserAccessResponse unlockUser(HttpServletRequest request,
                                                @AuthenticationPrincipal AppUser admin,
-                                               @RequestBody UpdateUserAccessRequest accessRequest){
-        log.info("Updating user access - {}",accessRequest);
+                                               @RequestBody UpdateUserAccessRequest accessRequest) {
+        log.info("Updating user access - {}", accessRequest);
 
         Event event;
         String object;
-        if (accessRequest.getOperation().equals(UpdateUserAccessRequest.Operation.LOCK)){
-            event=Event.LOCK_USER;
-            object=String.format("Lock user %s",accessRequest.getUser().toLowerCase());
-        }else {
-            event=Event.UNLOCK_USER;
-            object=String.format("Unlock user %s",accessRequest.getUser().toLowerCase());
+        if (accessRequest.getOperation().equals(UpdateUserAccessRequest.Operation.LOCK)) {
+            event = Event.LOCK_USER;
+            object = String.format("Lock user %s", accessRequest.getUser().toLowerCase());
+        } else {
+            event = Event.UNLOCK_USER;
+            object = String.format("Unlock user %s", accessRequest.getUser().toLowerCase());
         }
 
         UpdateUserAccessResponse response = userService.updateUserAccess(accessRequest);

@@ -3,7 +3,8 @@
 		"_postman_id": "c0595fd4-596c-43ac-8ee5-8358f78ce9e5",
 		"name": "account-service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "14524570"
+		"_exporter_id": "14524570",
+		"_collection_link": "https://cloudy-crater-878009.postman.co/workspace/microservices-course~abfc7e2e-b9e4-43cc-9254-079e3b0023a2/collection/14524570-c0595fd4-596c-43ac-8ee5-8358f78ce9e5?action=share&source=collection_link&creator=14524570"
 	},
 	"item": [
 		{
@@ -21,12 +22,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/auth/signup",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/auth/signup",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"auth",
@@ -51,12 +52,42 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/auth/signup",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/auth/signup",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup - USER 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Bill\",\r\n   \"lastname\": \"Gates\",\r\n   \"email\": \"bill.gates@acme.com\",\r\n   \"password\": \"Pass$1234567\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/auth/signup",
+					"protocol": "{{scheme}}",
+					"host": [
+						"localhost"
+					],
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"auth",
@@ -81,12 +112,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/auth/signup",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/auth/signup",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"auth",
@@ -118,7 +149,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"user\": \"johndoe12@acme.com\",\r\n   \"role\":\"AUDITOR\",\r\n   \"operation\": \"GRANT\"\r\n}",
+					"raw": "{\r\n   \"user\": \"johndoe12@acme.com\",\r\n   \"role\":\"ACCOUNTANT\",\r\n   \"operation\": \"GRANT\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -126,12 +157,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/role",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/role",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -172,12 +203,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/role",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/role",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -218,12 +249,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/auth/changepass",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/auth/changepass",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"auth",
@@ -239,12 +270,12 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/actuator/shutdown",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/actuator/shutdown",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"actuator",
@@ -257,11 +288,26 @@
 		{
 			"name": "upload payrolls",
 			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "johndoe12@acme.com",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\r\n    {\r\n        \"employee\": \"muhammadali40k@acme.com\",\r\n        \"period\": \"06-2022\",\r\n        \"salary\": 500\r\n    },\r\n    {\r\n        \"employee\": \"muhammadali41k@acme.com\",\r\n        \"period\": \"07-2022\",\r\n        \"salary\": 1000\r\n    },\r\n    {\r\n        \"employee\": \"sasa@acme.com\",\r\n        \"period\": \"08-2022\",\r\n        \"salary\": 1200\r\n    }\r\n]",
+					"raw": "[\r\n    {\r\n        \"employee\": \"muhammadali40k@acme.com\",\r\n        \"period\": \"06-2022\",\r\n        \"salary\": 500\r\n    },\r\n    {\r\n        \"employee\": \"ahmedali12@acme.com\",\r\n        \"period\": \"07-2022\",\r\n        \"salary\": 1000\r\n    },\r\n    {\r\n        \"employee\": \"bill.gates@acme.com\",\r\n        \"period\": \"08-2022\",\r\n        \"salary\": 1200\r\n    },  {\r\n        \"employee\": \"muhammadali40k@acme.com\",\r\n        \"period\": \"05-2017\",\r\n        \"salary\": 500\r\n    },\r\n    {\r\n        \"employee\": \"ahmedali12@acme.com\",\r\n        \"period\": \"05-2017\",\r\n        \"salary\": 1000\r\n    },\r\n    {\r\n        \"employee\": \"bill.gates@acme.com\",\r\n        \"period\": \"05-2017\",\r\n        \"salary\": 1200\r\n    }\r\n]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -269,12 +315,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/acct/payments",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/acct/payments",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"acct",
@@ -285,14 +331,14 @@
 			"response": []
 		},
 		{
-			"name": "get payments with period",
+			"name": "get my payments in period",
 			"request": {
 				"auth": {
 					"type": "basic",
 					"basic": [
 						{
 							"key": "username",
-							"value": "muhammadali40k@acme.com",
+							"value": "johndoe12@acme.com",
 							"type": "string"
 						},
 						{
@@ -305,12 +351,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/empl/payment?period=<mm-YYYY>",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/empl/payment?period=06-2022",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"empl",
@@ -319,7 +365,7 @@
 					"query": [
 						{
 							"key": "period",
-							"value": "<mm-YYYY>"
+							"value": "06-2022"
 						}
 					]
 				}
@@ -327,14 +373,14 @@
 			"response": []
 		},
 		{
-			"name": "get payments without period",
+			"name": "get all payments in period",
 			"request": {
 				"auth": {
 					"type": "basic",
 					"basic": [
 						{
 							"key": "username",
-							"value": "muhammadali40k@acme.com",
+							"value": "johndoe12@acme.com",
 							"type": "string"
 						},
 						{
@@ -347,12 +393,54 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/empl/payment",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/acct/payment?period=05-2017",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
+					"path": [
+						"api",
+						"acct",
+						"payment"
+					],
+					"query": [
+						{
+							"key": "period",
+							"value": "05-2017"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get my payments no period",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "johndoe12@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/empl/payment",
+					"protocol": "{{scheme}}",
+					"host": [
+						"localhost"
+					],
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"empl",
@@ -365,15 +453,30 @@
 		{
 			"name": "get all users info",
 			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "muhammadali40k@acme.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "Pass$1234567",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -398,12 +501,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/acct/payments",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/acct/payments",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"acct",
@@ -428,12 +531,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/role",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/role",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -474,12 +577,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/access",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/access",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -520,12 +623,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/access",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/access",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -557,12 +660,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/samyali12@acme.com",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/samyali12@acme.com",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -594,12 +697,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/admin/user/samyali12@acme.com",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/admin/user/samyali12@acme.com",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"admin",
@@ -631,12 +734,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/acct/payments/all",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/acct/payments/all",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"acct",
@@ -668,12 +771,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:28852/api/security/events",
-					"protocol": "http",
+					"raw": "{{scheme}}://localhost:{{server.port}}/api/security/events",
+					"protocol": "{{scheme}}",
 					"host": [
 						"localhost"
 					],
-					"port": "28852",
+					"port": "{{server.port}}",
 					"path": [
 						"api",
 						"security",
@@ -682,6 +785,40 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server.port",
+			"value": "8888",
+			"type": "string"
+		},
+		{
+			"key": "scheme",
+			"value": "https",
+			"type": "string"
 		}
 	]
 }

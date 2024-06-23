@@ -17,4 +17,6 @@ public interface PayrollsRepository extends JpaRepository<Payroll, Long> {
     Optional<Payroll>findPayrollByAppUserAndPeriod(AppUser appUser, YearMonth period);
     List<Payroll>findAllByAppUserOrderByPeriodDesc(AppUser appUser);
 
+    List<Payroll> findAllByPeriod(YearMonth period);
+
 }

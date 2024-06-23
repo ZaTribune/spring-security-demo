@@ -22,6 +22,8 @@ public interface PayrollsService {
 
     GetPayrollResponse getPayrollByPeriod(AppUser appUser, String period);
 
+    List<GetPayrollResponse> getPayrollByPeriod(String period);
+
     List<GetPayrollResponse> getPayrolls(AppUser appUser);
 
     List<GetPayrollResponse> getAllPayrolls();

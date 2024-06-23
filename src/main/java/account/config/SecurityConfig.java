@@ -10,23 +10,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 
 @Slf4j
 @Configuration
 @AllArgsConstructor
-//@EnableGlobalMethodSecurity(
-//        prePostEnabled = true,
-//        securedEnabled = true,
-//        jsr250Enabled = true)
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     private AppUserService userDetailsService;
 
@@ -36,63 +34,55 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userDetailsService);
         provider.setPostAuthenticationChecks(toCheck -> {
-            AppUser appUser= (AppUser) toCheck;
-            if (appUser.getLoginAttempts()>0) {
-                log.info("resetting login attempts - {}",appUser);
-               userDetailsService.resetLoginAttempts(appUser);
+            AppUser appUser = (AppUser) toCheck;
+            if (appUser.getLoginAttempts() > 0) {
+                log.info("resetting login attempts - {}", appUser);
+                userDetailsService.resetLoginAttempts(appUser);
             }
         });
         return provider;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.httpBasic()
-                .authenticationEntryPoint(restAuthenticationEntryPoint) // Handle auth error
-                .and()
-                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
-                .and()
-                .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
-                .and()
-                .authorizeRequests()
-                // anyone
-                .antMatchers(HttpMethod.POST, "/api/signup").permitAll()
-                .antMatchers(HttpMethod.POST,"/actuator/shutdown").permitAll()
+        httpSecurity
+                .authenticationProvider(authenticationProvider())
+                .httpBasic(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(config ->
+                        config.accessDeniedHandler(customAccessDeniedHandler)
+                                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                )
+                .headers(config -> config.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .authorizeHttpRequests(config -> config
+                        .requestMatchers("/h2-console/**").permitAll()
+                        // anyone
+                        .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/actuator/shutdown").hasAuthority(Role.ROLE_ADMINISTRATOR.name())
 
-                //users & accountants & admins
-                .antMatchers(HttpMethod.POST,"/api/auth/changepass")
-                     .authenticated()
+                        //users & accountants & admins
+                        .requestMatchers(HttpMethod.POST, "/api/auth/changepass").authenticated()
 
-                //users & accountants
-                .antMatchers(HttpMethod.GET,"/api/empl/payment/**")
-                      .hasAnyAuthority(Role.ROLE_USER.name(),Role.ROLE_ACCOUNTANT.name())
+                        //users & accountants
+                        .requestMatchers(HttpMethod.GET, "/api/empl/payment/**")
+                        .hasAnyAuthority(Role.ROLE_ADMINISTRATOR.name(), Role.ROLE_USER.name(), Role.ROLE_ACCOUNTANT.name())
 
-                //accountant only
-                .antMatchers(HttpMethod.POST,"/api/acct/payments")
-                .hasAuthority(Role.ROLE_ACCOUNTANT.name())
-                .antMatchers(HttpMethod.PUT,"/api/acct/payments")
-                .hasAuthority(Role.ROLE_ACCOUNTANT.name())
+                        //accountants only
+                        .requestMatchers("/api/acct/payments/**").hasAnyAuthority(Role.ROLE_ADMINISTRATOR.name(), Role.ROLE_ACCOUNTANT.name())
+                        //admin only
+                        .requestMatchers("/api/admin/**").hasAuthority(Role.ROLE_ADMINISTRATOR.name())
 
-                //admin only
-                .antMatchers("/api/admin/**").hasAuthority(Role.ROLE_ADMINISTRATOR.name())
-
-                //auditor only
-                .antMatchers(HttpMethod.GET,"/api/security/events/**").hasAuthority(Role.ROLE_AUDITOR.name())
-
-                .antMatchers(HttpMethod.GET,"/api/acct/payments/all").permitAll()//for testing
-                .antMatchers(HttpMethod.GET).authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // no session
+                        //auditor only
+                        .requestMatchers(HttpMethod.GET, "/api/security/events/**").hasAnyAuthority(Role.ROLE_ADMINISTRATOR.name(), Role.ROLE_AUDITOR.name())
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // no session
+        return httpSecurity.build();
     }
 }

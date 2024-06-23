@@ -5,7 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class AppUser implements UserDetails {
     private Integer loginAttempts;
 
     @ToString.Exclude
-    @OneToMany
-    private List<Payroll>payrolls;
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Payroll> payrolls;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
@@ -95,15 +96,16 @@ public class AppUser implements UserDetails {
     }
 
     public void grantAuthority(Role authority) {
-        if ( roles == null ) roles = new ArrayList<>();
-        roles.add(0,authority);
+        if (roles == null) roles = new ArrayList<>();
+        roles.add(0, authority);
     }
+
     public void removeAuthority(Role authority) {
         roles.remove(authority);
     }
 
     @Override
-    public List<GrantedAuthority> getAuthorities(){
+    public List<GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.toString())));
         return authorities;

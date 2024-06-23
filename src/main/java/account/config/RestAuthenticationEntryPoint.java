@@ -7,8 +7,8 @@ import account.service.EventService;
 import account.service.UserService;
 import account.util.HttpUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,12 +16,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -30,11 +31,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final EventService eventService;
     private final UserService userService;
 
-    @Autowired
-    public RestAuthenticationEntryPoint(EventService eventService, UserService userService) {
-        this.eventService = eventService;
-        this.userService = userService;
-    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
@@ -50,19 +46,18 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 .build();
 
         String emailDecoded = HttpUtils.extractUsernameBasicAuth(request);
+        eventService.logEvent(
+                SecurityEvent.builder()
+                        .date(LocalDateTime.now().toString())
+                        .action(Event.LOGIN_FAILED)
+                        .subject(emailDecoded)
+                        .object(request.getServletPath())
+                        .path(request.getServletPath())
+                        .build());
 
         userService.findUserByUsername(emailDecoded).ifPresentOrElse(appUser -> {
             appUser = userService.incrementLoginAttempts(appUser);
             if (appUser.getLoginAttempts() == 5) {
-                eventService.logEvent(
-                        SecurityEvent.builder()
-                                .date(LocalDateTime.now().toString())
-                                .action(Event.LOGIN_FAILED)
-                                .subject(emailDecoded)
-                                .object(request.getServletPath())
-                                .path(request.getServletPath())
-                                .build());
-
                 log.error("lock user {} after 5 failed login attempts", emailDecoded);
                 eventService.logEvent(
                         SecurityEvent.builder()
@@ -85,6 +80,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                                     .build()
                     );
                 }
+                errorResponse.setMessage("User account is locked");
             } else if (appUser.getLoginAttempts() < 5) {
                 eventService.logEvent(
                         SecurityEvent.builder()
@@ -94,8 +90,9 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                                 .object(request.getServletPath())
                                 .path(request.getServletPath())
                                 .build());
+                errorResponse.setMessage("Bad Credentials!");
             }
-            errorResponse.setMessage("User account is locked");
+
         }, () -> {
             if (!emailDecoded.equals("Anonymous"))
                 eventService.logEvent(

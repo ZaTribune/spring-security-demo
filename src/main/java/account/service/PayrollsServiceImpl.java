@@ -32,7 +32,7 @@ public class PayrollsServiceImpl implements PayrollsService {
 
     private final DateUtils dateUtils = new DateUtils();
 
-    private final DateTimeFormatter formatter=DateTimeFormatter.ofPattern("MM-yyyy");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-yyyy");
 
     @Autowired
     public PayrollsServiceImpl(PayrollsRepository payrollsRepository, UserRepository userRepository) {
@@ -58,7 +58,7 @@ public class PayrollsServiceImpl implements PayrollsService {
                             .orElseThrow(() -> createException(HttpStatus.BAD_REQUEST, "User Not Found!"));
 
 
-                    payrollsRepository.findPayrollByAppUserAndPeriod(appUser, YearMonth.parse(dto.getPeriod(),formatter))
+                    payrollsRepository.findPayrollByAppUserAndPeriod(appUser, YearMonth.parse(dto.getPeriod(), formatter))
                             .ifPresent(p -> {
                                         throw createException(HttpStatus.BAD_REQUEST,
                                                 String.format("A payroll within this period [%s] already Exists! - user:[%s]",
@@ -67,7 +67,7 @@ public class PayrollsServiceImpl implements PayrollsService {
                             );
                     return Payroll.builder()
                             .appUser(appUser)
-                            .period(YearMonth.parse(dto.getPeriod(),formatter))//already validated
+                            .period(YearMonth.parse(dto.getPeriod(), formatter))//already validated
                             .salary(dto.getSalary())
                             .build();
                 })
@@ -81,16 +81,16 @@ public class PayrollsServiceImpl implements PayrollsService {
 
     @Override
     public UploadPayrollsResponse updatePayroll(UploadPayrollsRequest updateRequest) {
-        log.info("update payroll [{}] for employee: [{}]",updateRequest.getPeriod(),updateRequest.getEmployee());
+        log.info("update payroll [{}] for employee: [{}]", updateRequest.getPeriod(), updateRequest.getEmployee());
         //todo:should return object
         if (!dateUtils.validateRequestFormat(updateRequest.getPeriod()))
             throw createException(HttpStatus.BAD_REQUEST, "Invalid period!");
 
-        AppUser appUser=userRepository.findAppUserByUsernameIgnoreCase(updateRequest.getEmployee())
-                .orElseThrow(()-> createException(HttpStatus.BAD_REQUEST, "User Not Found!"));
+        AppUser appUser = userRepository.findAppUserByUsernameIgnoreCase(updateRequest.getEmployee())
+                .orElseThrow(() -> createException(HttpStatus.BAD_REQUEST, "User Not Found!"));
 
-        Payroll payroll = payrollsRepository.findPayrollByAppUserAndPeriod(appUser,YearMonth.parse(updateRequest.getPeriod(),formatter))
-                .orElseThrow(()-> createException(HttpStatus.BAD_REQUEST, "Payroll Not Found!"));
+        Payroll payroll = payrollsRepository.findPayrollByAppUserAndPeriod(appUser, YearMonth.parse(updateRequest.getPeriod(), formatter))
+                .orElseThrow(() -> createException(HttpStatus.BAD_REQUEST, "Payroll Not Found!"));
 
         if (updateRequest.getSalary() < 0)
             throw createException(HttpStatus.BAD_REQUEST, "Salary cannot be a negative value!");
@@ -106,13 +106,13 @@ public class PayrollsServiceImpl implements PayrollsService {
 
     @Override
     public GetPayrollResponse getPayrollByPeriod(AppUser appUser, String period) {
-        log.info("get payroll on period [{}] for employee: [{}]",period,appUser.getUsername());
+        log.info("get payroll on period [{}] for employee: [{}]", period, appUser.getUsername());
 
         if (!dateUtils.validateRequestFormat(period))
             throw createException(HttpStatus.BAD_REQUEST, "Invalid period!");
 
-        Payroll payroll = payrollsRepository.findPayrollByAppUserAndPeriod(appUser, YearMonth.parse(period,formatter))
-                .orElseThrow(()-> createException(HttpStatus.BAD_REQUEST, "Payroll Not Found!"));
+        Payroll payroll = payrollsRepository.findPayrollByAppUserAndPeriod(appUser, YearMonth.parse(period, formatter))
+                .orElseThrow(() -> createException(HttpStatus.BAD_REQUEST, "Payroll Not Found!"));
 
 
         return GetPayrollResponse.builder()
@@ -124,8 +124,27 @@ public class PayrollsServiceImpl implements PayrollsService {
     }
 
     @Override
+    public List<GetPayrollResponse> getPayrollByPeriod(String period) {
+        log.info("get payrolls on period: [{}]", period);
+        if (!dateUtils.validateRequestFormat(period))
+            throw createException(HttpStatus.BAD_REQUEST, "Invalid period!");
+
+        return payrollsRepository.findAllByPeriod(YearMonth.parse(period, formatter))
+                .stream()
+                .map(entity ->
+                        GetPayrollResponse.builder()
+                                .name(entity.getAppUser().getName())
+                                .lastname(entity.getAppUser().getLastname())
+                                .salary(adjustSalary(entity.getSalary()))
+                                .period(dateUtils.adjustResponseFormat(entity.getPeriod()))
+                                .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<GetPayrollResponse> getPayrolls(AppUser appUser) {
-        log.info("get payrolls for employee: [{}]",appUser.getUsername());
+        log.info("get payrolls for employee: [{}]", appUser.getUsername());
         return payrollsRepository.findAllByAppUserOrderByPeriodDesc(appUser)
                 .stream()
                 .map(entity ->

@@ -12,7 +12,6 @@ public class BCryptEncoderConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
 
-
         return new BCryptPasswordEncoder(13,new SecureRandom());
     }
 }

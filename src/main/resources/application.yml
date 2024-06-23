@@ -1,0 +1,42 @@
+
+server:
+  port: 8888
+  ssl:
+    key-store-password: service
+    key-store-type: PKCS12
+    key-alias: accountant_service
+    enabled: 'true'
+    key-store: classpath:keystore/service.p12
+  error:
+    include-message: always
+
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: admin
+    password: ''
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    show-sql: true
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  h2:
+    console:
+      enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: true
+

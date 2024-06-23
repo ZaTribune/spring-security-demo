@@ -4,8 +4,8 @@ import account.db.entity.AppUser;
 import account.db.entity.Role;
 import account.db.repository.UserRepository;
 import account.domain.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class UserService implements AppUserService {
 
@@ -27,11 +28,6 @@ public class UserService implements AppUserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(acme\\.)+[a-zA-Z]{2,6}$";
     Pattern pattern = Pattern.compile(regex);
@@ -166,6 +162,11 @@ public class UserService implements AppUserService {
 
         if (role == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found!");
+
+        //check for the existence of role
+        if (appUser.getRoles().contains(Role.valueOfLabel(request.getRole()))){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role already granted!");
+        }
 
         if (Operation.GRANT.equals(request.getOperation())) {
 
